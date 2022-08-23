@@ -1,8 +1,17 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import styles from './searchPage.module.scss';
 
 const SearchPage = () => {
-  const [result, setResult] = useState('Repogitory');
+  const [language, setLanguage] = useState('');
+  const [filter, setFilter] = useState('');
+  const selectLanguage = (event: ChangeEvent<HTMLSelectElement>) => {
+    setLanguage(event.currentTarget.value);
+  };
+  const selectFilter = (event: ChangeEvent<HTMLSelectElement>) => {
+    setFilter(event.currentTarget.value);
+  };
+  console.log(language);
+  console.log(filter);
   return (
     <div className={styles.container}>
       <header>
@@ -14,8 +23,8 @@ const SearchPage = () => {
           {/* 돋보기 이미지 */}
           <input type="text" placeholder="typing..." />
         </div>
-        <select className={styles.optionBox}>
-          <option selected>language</option>
+        <select onChange={selectLanguage} className={styles.optionBox}>
+          <option defaultValue="language">language</option>
           <option value="C">C</option>
           <option value="C++">C++</option>
           <option value="JAVA">JAVA</option>
@@ -30,13 +39,11 @@ const SearchPage = () => {
           Search
         </button>
       </form>
-      <h2>{`Results for "${result}"`}</h2>
+      <h2>{`Results for "${language}"`}</h2>
       <section className={styles.filterContainer}>
-        <p>results found</p>
-        <select className={styles.filterBox}>
-          <option value="Recently Updated" selected>
-            Recently Updated
-          </option>
+        <p>102,232 results found</p>
+        <select onChange={selectFilter} className={styles.filterBox}>
+          <option defaultValue="Recently Updated">Recently Updated</option>
           <option value="Best Match">Best Match</option>
         </select>
       </section>
