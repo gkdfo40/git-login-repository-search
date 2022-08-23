@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-interface ApplicantState {
+interface AuthState {
   access_token: string | null;
 }
 
-const initialApplicantState: ApplicantState = {
+const initialApplicantState: AuthState = {
   access_token: 'not null',
 };
 const authSlice = createSlice({

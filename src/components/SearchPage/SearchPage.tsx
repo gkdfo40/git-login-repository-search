@@ -1,9 +1,11 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
+// import { useAppDispatch } from 'store/hooks';
 import styles from './searchPage.module.scss';
 
 const SearchPage = () => {
   const [language, setLanguage] = useState('language');
   const [filter, setFilter] = useState('Recently Updated');
+  // const dispatch = useAppDispatch();
 
   const selectLanguage = (event: ChangeEvent<HTMLSelectElement>) => {
     setLanguage(event.currentTarget.value);
@@ -16,6 +18,12 @@ const SearchPage = () => {
   const onSubmitForm = (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
   };
+
+  // useEffect(() => {
+  //   return () => {
+  //     dispatch(initite());
+  //   };
+  // },[]);
 
   return (
     <div className={styles.container}>
