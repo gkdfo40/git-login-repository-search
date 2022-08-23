@@ -2,28 +2,37 @@ import { ChangeEvent, useState } from 'react';
 import styles from './searchPage.module.scss';
 
 const SearchPage = () => {
-  const [language, setLanguage] = useState('');
-  const [filter, setFilter] = useState('');
+  const [language, setLanguage] = useState('language');
+  const [filter, setFilter] = useState('Recently Updated');
+
   const selectLanguage = (event: ChangeEvent<HTMLSelectElement>) => {
     setLanguage(event.currentTarget.value);
   };
+
   const selectFilter = (event: ChangeEvent<HTMLSelectElement>) => {
     setFilter(event.currentTarget.value);
   };
-  console.log(language);
-  console.log(filter);
+
+  const onSubmitForm = (event: ChangeEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  };
+
   return (
     <div className={styles.container}>
       <header>
         <h1>Find GitHub Repogitory</h1>
       </header>
 
-      <form className={styles.searchForm}>
+      <form onSubmit={onSubmitForm} className={styles.searchForm}>
         <div className={styles.inputBox}>
           {/* 돋보기 이미지 */}
           <input type="text" placeholder="typing..." />
         </div>
-        <select onChange={selectLanguage} className={styles.optionBox}>
+        <select
+          onChange={selectLanguage}
+          value={language}
+          className={styles.optionBox}
+        >
           <option defaultValue="language">language</option>
           <option value="C">C</option>
           <option value="C++">C++</option>
@@ -42,7 +51,11 @@ const SearchPage = () => {
       <h2>{`Results for "${language}"`}</h2>
       <section className={styles.filterContainer}>
         <p>102,232 results found</p>
-        <select onChange={selectFilter} className={styles.filterBox}>
+        <select
+          onChange={selectFilter}
+          value={filter}
+          className={styles.filterBox}
+        >
           <option defaultValue="Recently Updated">Recently Updated</option>
           <option value="Best Match">Best Match</option>
         </select>
