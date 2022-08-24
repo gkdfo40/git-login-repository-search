@@ -1,3 +1,4 @@
+import PagiNation from 'components/Pagination/Pagination';
 import { ChangeEvent, useEffect, useState } from 'react';
 // import { useAppDispatch } from 'store/hooks';
 import styles from './searchPage.module.scss';
@@ -5,8 +6,12 @@ import styles from './searchPage.module.scss';
 const SearchPage = () => {
   const [language, setLanguage] = useState('language');
   const [filter, setFilter] = useState('Recently Updated');
+  const [inputValue, setInputValue] = useState('');
   // const dispatch = useAppDispatch();
 
+  const onChanageInput = (event: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.currentTarget.value);
+  };
   const selectLanguage = (event: ChangeEvent<HTMLSelectElement>) => {
     setLanguage(event.currentTarget.value);
   };
@@ -17,6 +22,9 @@ const SearchPage = () => {
 
   const onSubmitForm = (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (inputValue.length > 0) {
+      // dispatchEvent(fetchApiThunck)
+    }
   };
 
   // useEffect(() => {
@@ -34,7 +42,12 @@ const SearchPage = () => {
       <form onSubmit={onSubmitForm} className={styles.searchForm}>
         <div className={styles.inputBox}>
           {/* 돋보기 이미지 */}
-          <input type="text" placeholder="typing..." />
+          <input
+            type="text"
+            placeholder="typing..."
+            value={inputValue}
+            onChange={onChanageInput}
+          />
         </div>
         <select
           onChange={selectLanguage}
@@ -71,7 +84,7 @@ const SearchPage = () => {
       <ul className={styles.repositoriesContainer}>
         <li>저장소</li>
       </ul>
-      <div>pageNation</div>
+      <PagiNation currentPage={1} totalCount={500} />
     </div>
   );
 };
