@@ -6,6 +6,7 @@ import { ChangeEvent, useState } from 'react';
 import { RepositoryData } from 'types';
 import ReactLoading from 'react-loading';
 import styles from './searchPage.module.scss';
+import Input from 'components/Input/Input';
 
 const SearchPage = () => {
   const [language, setLanguage] = useState('language');
@@ -14,9 +15,9 @@ const SearchPage = () => {
   const [getRepository, { loading, data }] =
     useLazyQuery<RepositoryData>(GET_REPOGITORY);
 
-  const onChanageInput = (event: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.currentTarget.value);
-  };
+  // const onChanageInput = (event: ChangeEvent<HTMLInputElement>) => {
+  //   setInputValue(event.currentTarget.value);
+  // };
   const selectLanguage = (event: ChangeEvent<HTMLSelectElement>) => {
     setLanguage(event.currentTarget.value);
   };
@@ -42,7 +43,7 @@ const SearchPage = () => {
         getRepository({
           variables: {
             searchText: `name: ${inputValue} language: ${language}`,
-            LAST: 10,
+            FIRST: 10,
           },
         });
       setReultText(inputValue);
@@ -77,12 +78,13 @@ const SearchPage = () => {
       <form onSubmit={onSubmitForm} className={styles.searchForm}>
         <div className={styles.inputBox}>
           <MagnifierIcon />
-          <input
+          <Input setInputValue={setInputValue} />
+          {/* <input
             type="text"
             placeholder="typing..."
             value={inputValue}
             onChange={onChanageInput}
-          />
+          /> */}
         </div>
         <select
           onChange={selectLanguage}

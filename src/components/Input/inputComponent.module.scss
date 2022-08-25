@@ -1,0 +1,10 @@
+.container {
+  input {
+    &:focus {
+      outline: none;
+    }
+    border-style: none;
+    padding: 5px;
+    width: 250px;
+  }
+}
