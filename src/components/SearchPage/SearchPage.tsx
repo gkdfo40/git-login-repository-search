@@ -1,13 +1,17 @@
+import { useLazyQuery } from '@apollo/client';
+import { GET_REPOGITORY } from 'apollo';
 import PagiNation from 'components/Pagination/Pagination';
-import { ChangeEvent, useEffect, useState } from 'react';
-// import { useAppDispatch } from 'store/hooks';
+import RepositoryItme from 'components/RepositoryItem/RepositoryItem';
+import { ChangeEvent, useState } from 'react';
+import { RepositoryData } from 'types';
 import styles from './searchPage.module.scss';
 
 const SearchPage = () => {
   const [language, setLanguage] = useState('language');
   const [filter, setFilter] = useState('Recently Updated');
   const [inputValue, setInputValue] = useState('');
-  // const dispatch = useAppDispatch();
+  const [getRepository, { loading, data, error }] =
+    useLazyQuery<RepositoryData>(GET_REPOGITORY);
 
   const onChanageInput = (event: ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.currentTarget.value);
@@ -23,15 +27,9 @@ const SearchPage = () => {
   const onSubmitForm = (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (inputValue.length > 0) {
-      // dispatchEvent(fetchApiThunck)
+      getRepository({ variables: { searchText: `name: ${inputValue}` } });
     }
   };
-
-  // useEffect(() => {
-  //   return () => {
-  //     dispatch(initite());
-  //   };
-  // },[]);
 
   return (
     <div className={styles.container}>
@@ -70,19 +68,38 @@ const SearchPage = () => {
         </button>
       </form>
       <h2>{`Results for "${language}"`}</h2>
-      <section className={styles.filterContainer}>
-        <p>102,232 results found</p>
-        <select
-          onChange={selectFilter}
-          value={filter}
-          className={styles.filterBox}
-        >
-          <option defaultValue="Recently Updated">Recently Updated</option>
-          <option value="Best Match">Best Match</option>
-        </select>
-      </section>
+      {data && (
+        <section className={styles.filterContainer}>
+          <p>{`${data.search.repositoryCount.toLocaleString(
+            'ko-KR'
+          )} results found`}</p>
+          <select
+            onChange={selectFilter}
+            value={filter}
+            className={styles.filterBox}
+          >
+            <option defaultValue="Recently Updated">Recently Updated</option>
+            <option value="Best Match">Best Match</option>
+          </select>
+        </section>
+      )}
+
       <ul className={styles.repositoriesContainer}>
-        <li>저장소</li>
+        {data &&
+          data.search.nodes.map((node) => (
+            <li key={node.id}>
+              <RepositoryItme
+                id={node.id}
+                name={node.name}
+                stargazerCount={node.stargazerCount}
+                updatedAt={node.updatedAt}
+                url={node.url}
+                owner={node.owner}
+              />
+            </li>
+          ))}
+
+        {loading && <div>Loading</div>}
       </ul>
       <PagiNation currentPage={1} totalCount={500} />
     </div>
