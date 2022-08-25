@@ -40,3 +40,15 @@ export const GET_REPOGITORY = gql`
     }
   }
 `;
+
+export const GET_KEYWORD = gql`
+  query ($inputValue: String!) {
+    search(type: REPOSITORY, query: $inputValue, first: 10) {
+      nodes {
+        ... on Repository {
+          name
+        }
+      }
+    }
+  }
+`;

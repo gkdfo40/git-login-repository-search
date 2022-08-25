@@ -1,3 +1,19 @@
+// export interface RepositoryData {
+//   data: Data;
+// }
+
+interface KNode {
+  name: string;
+}
+
+interface KSearch {
+  nodes: KNode[];
+}
+
+export interface KeyWordData {
+  search: KSearch;
+}
+
 export interface PageInfo {
   startCursor: string;
   hasPreviousPage: boolean;
@@ -28,7 +44,3 @@ export interface Search {
 export interface RepositoryData {
   search: Search;
 }
-
-// export interface RepositoryData {
-//   data: Data;
-// }
