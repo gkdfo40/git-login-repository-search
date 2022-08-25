@@ -6,14 +6,15 @@ export interface PageInfo {
 }
 
 export interface Owner {
-  id: string;
-  __typename: string;
+  login: string;
+  avatarUrl: string;
 }
 
 export interface Node {
   id: string;
-  owner: Owner;
   name: string;
+  url: string;
+  owner: Owner;
   stargazerCount: number;
   updatedAt: Date;
 }
