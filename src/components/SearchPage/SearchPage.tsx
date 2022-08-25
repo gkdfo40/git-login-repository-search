@@ -5,6 +5,7 @@ import PagiNation from 'components/Pagination/Pagination';
 import RepositoryItme from 'components/RepositoryItem/RepositoryItem';
 import { ChangeEvent, useState } from 'react';
 import { RepositoryData } from 'types';
+import ReactLoading from 'react-loading';
 import styles from './searchPage.module.scss';
 
 const SearchPage = () => {
@@ -82,7 +83,15 @@ const SearchPage = () => {
         </button>
       </form>
       {resultText && <h2>{`Results for "${resultText}"`}</h2>}
-      {data && (
+      {loading && (
+        <ReactLoading
+          type={'bubbles'}
+          color={'cornflowerblue'}
+          height={500}
+          width={100}
+        />
+      )}
+      {!loading && data && (
         <section className={styles.filterContainer}>
           <p>{`${data.search.repositoryCount.toLocaleString(
             'ko-KR'
