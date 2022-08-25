@@ -85,3 +85,20 @@
     }
   }
 }
+
+.logoutBox {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 5px;
+  width: fit-content;
+  height: 20px;
+  background-color: black;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 16px;
+  &:hover {
+    cursor: pointer;
+  }
+}

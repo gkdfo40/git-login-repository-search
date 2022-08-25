@@ -7,6 +7,8 @@ import { RepositoryData } from 'types';
 import ReactLoading from 'react-loading';
 import styles from './searchPage.module.scss';
 import Input from 'components/Input/Input';
+import { useAppDispatch } from 'store/hooks';
+import { logout } from 'store/AuthSlice';
 
 const SearchPage = () => {
   const [language, setLanguage] = useState('language');
@@ -14,6 +16,10 @@ const SearchPage = () => {
   const [inputValue, setInputValue] = useState('');
   const [getRepository, { loading, data }] =
     useLazyQuery<RepositoryData>(GET_REPOGITORY);
+  const dispatch = useAppDispatch();
+  const onClickLogout = () => {
+    dispatch(logout());
+  };
 
   const selectLanguage = (event: ChangeEvent<HTMLSelectElement>) => {
     setLanguage(event.currentTarget.value);
@@ -68,6 +74,9 @@ const SearchPage = () => {
 
   return (
     <div className={styles.container}>
+      <button className={styles.logoutBox} onClick={onClickLogout}>
+        Logout
+      </button>
       <header>
         <h1>Find GitHub Repogitory</h1>
       </header>
