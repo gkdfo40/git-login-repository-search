@@ -1,5 +1,6 @@
 import { useLazyQuery } from '@apollo/client';
 import { GET_REPOGITORY } from 'apollo';
+import { MagnifierIcon } from 'assets';
 import PagiNation from 'components/Pagination/Pagination';
 import RepositoryItme from 'components/RepositoryItem/RepositoryItem';
 import { ChangeEvent, useState } from 'react';
@@ -8,7 +9,7 @@ import styles from './searchPage.module.scss';
 
 const SearchPage = () => {
   const [language, setLanguage] = useState('language');
-  const [filter, setFilter] = useState('Recently Updated');
+  const [resultText, setReultText] = useState<string | null>(null);
   const [inputValue, setInputValue] = useState('');
   const [getRepository, { loading, data, error }] =
     useLazyQuery<RepositoryData>(GET_REPOGITORY);
@@ -20,14 +21,27 @@ const SearchPage = () => {
     setLanguage(event.currentTarget.value);
   };
 
-  const selectFilter = (event: ChangeEvent<HTMLSelectElement>) => {
-    setFilter(event.currentTarget.value);
+  const selectSort = (event: ChangeEvent<HTMLSelectElement>) => {
+    const value = event.currentTarget.value as string;
+    getRepository({
+      variables: {
+        searchText: `name: ${resultText} language:${language} sort: ${value}`,
+      },
+    });
   };
 
   const onSubmitForm = (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (inputValue.length > 0) {
-      getRepository({ variables: { searchText: `name: ${inputValue}` } });
+      if (language === 'language')
+        getRepository({ variables: { searchText: `name: ${inputValue}` } });
+      else
+        getRepository({
+          variables: {
+            searchText: `name: ${inputValue} language: ${language}`,
+          },
+        });
+      setReultText(inputValue);
     }
   };
 
@@ -39,7 +53,7 @@ const SearchPage = () => {
 
       <form onSubmit={onSubmitForm} className={styles.searchForm}>
         <div className={styles.inputBox}>
-          {/* 돋보기 이미지 */}
+          <MagnifierIcon />
           <input
             type="text"
             placeholder="typing..."
@@ -67,19 +81,15 @@ const SearchPage = () => {
           Search
         </button>
       </form>
-      <h2>{`Results for "${language}"`}</h2>
+      {resultText && <h2>{`Results for "${resultText}"`}</h2>}
       {data && (
         <section className={styles.filterContainer}>
           <p>{`${data.search.repositoryCount.toLocaleString(
             'ko-KR'
           )} results found`}</p>
-          <select
-            onChange={selectFilter}
-            value={filter}
-            className={styles.filterBox}
-          >
-            <option defaultValue="Recently Updated">Recently Updated</option>
-            <option value="Best Match">Best Match</option>
+          <select onChange={selectSort} className={styles.filterBox}>
+            <option value="updated">Recently Updated</option>
+            <option defaultValue="best match">Best Match</option>
           </select>
         </section>
       )}

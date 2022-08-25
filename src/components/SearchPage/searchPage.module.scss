@@ -19,10 +19,17 @@
   .inputBox {
     display: flex;
     flex-direction: row;
+    align-items: center;
     width: fit-content;
     border: 1px solid black;
     height: 100%;
+    path {
+      fill: black;
+    }
     input {
+      &:focus {
+        outline: none;
+      }
       border-style: none;
       padding: 5px;
       width: 250px;
@@ -57,7 +64,7 @@
 }
 .repositoriesContainer {
   width: 500px;
-
+  gap: 2px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
