@@ -22,12 +22,3 @@ interface QueryState {
   // Page number of the results to fetch. Default: 1
   page: number;
 }
-
-// if I want to find repogitory filter query, the query form is
-const params = {
-  q: `repogitory_name language: javascript`,
-  sort: `best match`,
-  order: `desc`,
-  per_page: 30,
-  page: 1,
-};

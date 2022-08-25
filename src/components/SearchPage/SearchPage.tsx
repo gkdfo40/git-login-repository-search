@@ -1,7 +1,6 @@
 import { useLazyQuery } from '@apollo/client';
 import { GET_REPOGITORY } from 'apollo';
 import { MagnifierIcon } from 'assets';
-import PagiNation from 'components/Pagination/Pagination';
 import RepositoryItme from 'components/RepositoryItem/RepositoryItem';
 import { ChangeEvent, useState } from 'react';
 import { RepositoryData } from 'types';
@@ -12,7 +11,7 @@ const SearchPage = () => {
   const [language, setLanguage] = useState('language');
   const [resultText, setReultText] = useState<string | null>(null);
   const [inputValue, setInputValue] = useState('');
-  const [getRepository, { loading, data, error }] =
+  const [getRepository, { loading, data }] =
     useLazyQuery<RepositoryData>(GET_REPOGITORY);
 
   const onChanageInput = (event: ChangeEvent<HTMLInputElement>) => {
@@ -26,7 +25,8 @@ const SearchPage = () => {
     const value = event.currentTarget.value as string;
     getRepository({
       variables: {
-        searchText: `name: ${resultText} language:${language} sort: ${value}`,
+        searchText: `name: ${resultText}  sort: ${value}`,
+        LAST: 10,
       },
     });
   };
@@ -35,15 +35,37 @@ const SearchPage = () => {
     event.preventDefault();
     if (inputValue.length > 0) {
       if (language === 'language')
-        getRepository({ variables: { searchText: `name: ${inputValue}` } });
+        getRepository({
+          variables: { searchText: `name: ${inputValue}`, FIRST: 10 },
+        });
       else
         getRepository({
           variables: {
             searchText: `name: ${inputValue} language: ${language}`,
+            LAST: 10,
           },
         });
       setReultText(inputValue);
     }
+  };
+  const handleNextPage = () => {
+    getRepository({
+      variables: {
+        searchText: `name: ${resultText}`,
+        FIRST: 10,
+        nextPage: data?.search.pageInfo.endCursor,
+      },
+    });
+  };
+
+  const handlePrevPage = () => {
+    getRepository({
+      variables: {
+        searchText: `name: ${resultText}`,
+        LAST: 10,
+        prevPage: data?.search.pageInfo.startCursor,
+      },
+    });
   };
 
   return (
@@ -83,14 +105,7 @@ const SearchPage = () => {
         </button>
       </form>
       {resultText && <h2>{`Results for "${resultText}"`}</h2>}
-      {loading && (
-        <ReactLoading
-          type={'bubbles'}
-          color={'cornflowerblue'}
-          height={500}
-          width={100}
-        />
-      )}
+
       {!loading && data && (
         <section className={styles.filterContainer}>
           <p>{`${data.search.repositoryCount.toLocaleString(
@@ -117,10 +132,24 @@ const SearchPage = () => {
               />
             </li>
           ))}
-
-        {loading && <div>Loading</div>}
       </ul>
-      <PagiNation currentPage={1} totalCount={500} />
+      {loading && (
+        <ReactLoading
+          type={'bubbles'}
+          color={'cornflowerblue'}
+          height={500}
+          width={100}
+        />
+      )}
+      <div className={styles.paginationContainer}>
+        {data?.search.pageInfo.hasPreviousPage && (
+          <button onClick={handlePrevPage}>Prev Page</button>
+        )}
+
+        {data?.search.pageInfo.hasNextPage && (
+          <button onClick={handleNextPage}>Next Page</button>
+        )}
+      </div>
     </div>
   );
 };
