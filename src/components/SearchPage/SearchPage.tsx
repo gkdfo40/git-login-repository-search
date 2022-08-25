@@ -15,9 +15,6 @@ const SearchPage = () => {
   const [getRepository, { loading, data }] =
     useLazyQuery<RepositoryData>(GET_REPOGITORY);
 
-  // const onChanageInput = (event: ChangeEvent<HTMLInputElement>) => {
-  //   setInputValue(event.currentTarget.value);
-  // };
   const selectLanguage = (event: ChangeEvent<HTMLSelectElement>) => {
     setLanguage(event.currentTarget.value);
   };
@@ -79,12 +76,6 @@ const SearchPage = () => {
         <div className={styles.inputBox}>
           <MagnifierIcon />
           <Input setInputValue={setInputValue} />
-          {/* <input
-            type="text"
-            placeholder="typing..."
-            value={inputValue}
-            onChange={onChanageInput}
-          /> */}
         </div>
         <select
           onChange={selectLanguage}
